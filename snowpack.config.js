@@ -1,21 +1,13 @@
 // Snowpack Configuration File
 // See all supported options: https://www.snowpack.dev/reference/configuration
 
-/** @type {import("snowpack").SnowpackUserConfig } */
-module.exports = {
-  mount: {
-    /* ... */
-  },
+export default {
   plugins: [
-    /* ... */
+    [
+      '@snowpack/plugin-webpack',
+      {},
+    ],
+    ['snowpack-plugin-glslify', { "compress": false }]
   ],
-  packageOptions: {
-    /* ... */
-  },
-  devOptions: {
-    /* ... */
-  },
-  buildOptions: {
-    /* ... */
-  },
-};
+  exclude: ['**/.git/**/*']
+}
