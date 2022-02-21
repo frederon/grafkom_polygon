@@ -1,0 +1,135 @@
+<html>
+    <body>
+        <canvas width="400" height="400" id="canvas1" style="position: absolute;top: 0;left: 0; border: 5px solid black;"></canvas>
+        <canvas width="400" height="400" id="canvas2" style="position: absolute;top: 0;left: 0;"></canvas>
+
+        <script id="vs" type="x-shader">
+            attribute vec2 _xy;
+            uniform vec2 _size_;
+            void main () {
+                vec2 clipSpace = (_xy/_size_) * 2.0 - 1.0;
+                gl_Position = vec4(clipSpace * vec2(1,-1), 0, 1);
+            }
+        </script>
+
+        <script id="fs" type="x-shader">
+            precision mediump float;
+            uniform vec3 _color_;
+            void main(void) {
+                gl_FragColor = vec4(_color_, 1.0);
+            }
+        </script>
+
+        <script>
+            var colors = [], shapes = [];
+            function drawRectangle() {
+                canv2 = document.getElementById("canvas2");
+                ctx = canv2.getContext('2d');
+
+                var canv = document.getElementById("canvas1");
+                gl = canv.getContext('experimental-webgl');
+
+                var v_code = document.getElementById('vs').innerHTML;
+                var f_code = document.getElementById('fs').innerHTML;
+                p = initShader(gl,v_code,f_code);
+
+                var size = gl.getUniformLocation(p, '_size_');
+                gl.uniform2f(size, canv.width, canv.height);
+                color = gl.getUniformLocation(p, '_color_');
+
+                var b = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, b);
+
+                var xy = gl.getAttribLocation(p, '_xy');
+                gl.enableVertexAttribArray(xy);
+                gl.vertexAttribPointer(xy, 2, gl.FLOAT, false, 0, 0);
+
+                canv2.onmousedown = function(ev) {
+                    ev_down(ev, gl);
+                };
+                canv2.onmousemove = function(ev) {
+                    ev_move(ev, gl);
+                };
+                canv2.onmouseup = function(ev) {
+                    ev_up(ev, gl);
+                };
+            }
+
+            var started = false;
+            function ev_down(e, gl) {
+                x1 = e.clientX;
+                y1 = e.clientY;
+                started = true;
+            }
+
+            function ev_up(e, gl) {
+                started = false;
+                canv2.width = canv2.width;
+
+                var x2 = e.clientX;
+                var y2 = e.clientY;
+                var vertices = [x1,y1,   x2,y1, x1,y2,  x2,y2];
+                shapes.push(vertices);
+                colors.push([Math.random(), Math.random(), Math.random()]);
+
+                gl.clear(gl.COLOR_BUFFER_BIT);
+
+                var len = shapes.length;
+                for (var i = 0; i < len; i++) {
+                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(shapes[i]), gl.STATIC_DRAW);
+                    gl.uniform3f(color, colors[i][0], colors[i][1], colors[i][2]);
+                    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+                }
+            }
+
+            function ev_move(e, gl) {
+                xc = e.layerX;
+                yc = e.layerY;
+
+                if (!started) {
+                    return
+                };
+
+                x = Math.min(xc, x1),
+                y = Math.min(yc, y1),
+                w = Math.abs(xc-x1),
+                h = Math.abs(yc-y1);
+
+                ctx.clearRect(0, 0, canv2.width, canv2.height);
+                ctx.strokeRect(x, y, w, h);
+
+            }
+
+
+            function initShader(gl, vcode, fcode) {
+                var p = gl.createProgram();
+                var v = gl.createShader(gl.VERTEX_SHADER);
+                gl.shaderSource(v, vcode);
+                gl.compileShader(v);
+
+                var f = gl.createShader(gl.FRAGMENT_SHADER);
+                gl.shaderSource(f, fcode);
+                gl.compileShader(f);
+
+                if (!gl.getShaderParameter(v, gl.COMPILE_STATUS)){
+                    alert(gl.getShaderInfoLog(v));
+                    return null;    
+                }
+
+                if (!gl.getShaderParameter(f, gl.COMPILE_STATUS)){
+                    alert(gl.getShaderInfoLog(f));
+                    return null;    
+                }
+
+                gl.attachShader(p, v);
+                gl.attachShader(p, f);
+                gl.linkProgram(p);
+                gl.useProgram(p);
+
+                return p;
+            }
+
+            window.onload = drawRectangle
+        </script>
+    </body>
+</html>
