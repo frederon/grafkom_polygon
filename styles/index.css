@@ -1,0 +1,78 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    padding: 20px;
+}
+
+section .title-canvas {
+    position: relative;
+    width: 50vw;
+}
+section .title-canvas h1 {
+    font-size: 3vw;
+}
+
+section .title-canvas p {
+    font-size: 1.2vw;
+}
+
+section #webgl {
+    position: relative;
+    top: 100;
+    left:0;
+    border: 5px solid black;
+    width: 40vw;
+    height: 40vw;
+}
+
+section .control {
+    position: relative;
+    width: 50vw;
+    margin-top: 3vw;
+}
+
+section .control .xy {
+    position: relative;
+    margin-bottom: 2vw;
+}
+
+section .control .xy input {
+    margin-right: 1vw;
+    width: 2vw;
+    height: 1vw;
+}
+
+section .control button {
+    margin-right: 1vw;
+}
+
+section .control .color-input {
+    position: relative;
+    margin-top: 2vw;
+}
+
+section .control .slider input {
+  width: 100%;
+  height: 25px;
+  outline: none;
+}
+
+section .control .slider .span-left {
+    float: left;
+}
+
+section .control .slider .span-right {
+    float: right;
+}
+
+section .control .slider div {
+    position: relative;
+    margin-bottom: 3vw;
+}
