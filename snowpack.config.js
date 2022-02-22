@@ -7,7 +7,8 @@ export default {
       '@snowpack/plugin-webpack',
       {},
     ],
-    ['snowpack-plugin-glslify', { "compress": false }]
+    ['snowpack-plugin-glslify', { "compress": false }],
+    ['@snowpack/plugin-typescript']
   ],
   exclude: ['**/.git/**/*']
 }
