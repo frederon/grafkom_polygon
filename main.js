@@ -1,12 +1,11 @@
 import { bindVertex, draw } from "./controllers/drawer"
-import load from "./controllers/loader"
+import Loader from "./controllers/loader"
 
 const canvas = document.getElementById("webgl")
 canvas.width = 800
 canvas.height = 600
 
-const ctx = canvas.getContext('webgl2')
-const shaderProgram = load(ctx)
+const app = new Loader(canvas);
 
-bindVertex(ctx)
-draw(shaderProgram, ctx)
+bindVertex(app.ctx)
+draw(app.shaderProgram, app.ctx)
