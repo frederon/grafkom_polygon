@@ -1,3 +1,4 @@
+import BaseObject from "../models/BaseObject";
 import Line from "../models/Line";
 import { Action } from "./enums";
 import Loader from "./loader";
@@ -7,6 +8,7 @@ class EventsLoader {
 
   private isDrawing: boolean;
   private startVertex!: [number, number];
+  private tempObj!: BaseObject;
 
   public action: Action = Action.DRAW_LINE;
 
@@ -16,6 +18,16 @@ class EventsLoader {
 
     this.app.canvas.addEventListener('mousedown', this.startDrawing);
     this.app.canvas.addEventListener('mouseup', this.endDrawing);
+    this.app.canvas.addEventListener('mousemove', this.whileDrawing);
+
+    // Request frame for smoother animation
+    const requestAnimationFunction = (time: number) => {
+      time *= 0.0001;
+      this.app.clear();
+      this.app.drawObjects();
+      window.requestAnimationFrame(requestAnimationFunction);
+    };
+    window.requestAnimationFrame(requestAnimationFunction);
   }
 
   private getMousePosition = (event: MouseEvent): [number, number] => {
@@ -26,7 +38,6 @@ class EventsLoader {
   }
 
   private startDrawing = (event: MouseEvent) => {
-    console.log("start drawing")
     const [x, y] = this.getMousePosition(event);
 
     if (this.action === Action.DRAW_LINE) {
@@ -36,13 +47,14 @@ class EventsLoader {
   }
 
   private whileDrawing = (event: MouseEvent) => {
+    console.log("move")
     const [x, y] = this.getMousePosition(event);
 
     // Checks whether the user is draging or not
     if (this.isDrawing) {
       if (this.action === Action.DRAW_LINE) {
         const line = new Line(1, [...this.startVertex, x, y])
-        line.draw(this.app.shaderProgram, this.app.ctx);
+        this.app.tempObject = line;
       }
     }
   }
@@ -54,7 +66,8 @@ class EventsLoader {
     if (this.isDrawing) {
       if (this.action === Action.DRAW_LINE) {
         const line = new Line(1, [...this.startVertex, x, y])
-        line.draw(this.app.shaderProgram, this.app.ctx);
+        this.app.objects.push(line);
+
         this.isDrawing = false;
       }
     }

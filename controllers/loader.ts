@@ -10,11 +10,15 @@ class Loader {
   private vertexShader!: WebGLShader;
   private fragmentShader!: WebGLShader;
 
-  public objects!: Array<BaseObject>;
+  public objects: Array<BaseObject> = [];
+  public tempObject: BaseObject | null;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext('webgl2') as WebGL2RenderingContext;
+
+    this.objects = [];
+    this.tempObject = null;
 
     if (!this.ctx) {
       alert('Your browser does not support WebGL')
@@ -61,6 +65,16 @@ class Loader {
     this.ctx.viewport(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.clearColor(1, 1, 1, 1);
     this.ctx.clear(this.ctx.COLOR_BUFFER_BIT | this.ctx.DEPTH_BUFFER_BIT)
+  }
+
+  public drawObjects = (): void => {
+    for (const obj of this.objects) {
+      obj.draw(this.shaderProgram, this.ctx);
+    }
+
+    if (this.tempObject) {
+      this.tempObject.draw(this.shaderProgram, this.ctx);
+    }
   }
 }
 
