@@ -68,9 +68,26 @@
 
                 var x2 = e.clientX;
                 var y2 = e.clientY;
-                var vertices = [x1,y1,   x2,y1, x1,y2,  x2,y2];
+
+                // var deltay = Math.abs(y2-y1);
+                var deltax = x2-x1;
+                // var x2 = x1+deltay;
+
+                var posY = y1;
+                if(x2 > x1 && y2 > y1){
+                    posY += deltax;
+                } else{
+                    posY -=deltax;
+                }
+
+                if(x2 < x1 && y2 < y1){
+                    posY += 2*deltax;
+                }
+                
+                var vertices = [x1, y1, x2, y1,x2, posY,x1, posY];
                 shapes.push(vertices);
-                colors.push([Math.random(), Math.random(), Math.random()]);
+                // colors.push(0,0,0);
+                colors.push([Math.random(), Math.random(),Math.random()])
 
                 gl.clear(gl.COLOR_BUFFER_BIT);
 
@@ -78,7 +95,7 @@
                 for (var i = 0; i < len; i++) {
                     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(shapes[i]), gl.STATIC_DRAW);
                     gl.uniform3f(color, colors[i][0], colors[i][1], colors[i][2]);
-                    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+                    gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
                 }
             }
 
@@ -90,10 +107,19 @@
                     return
                 };
 
-                x = Math.min(xc, x1),
-                y = Math.min(yc, y1),
-                w = Math.abs(xc-x1),
-                h = Math.abs(xc-x1);
+                x = x1,
+                y = y1,
+                w = xc-x1,
+                h = w;
+
+                if(xc < x1){
+                  h = -h;
+                }
+                if(yc < y1){
+                    h = -h;
+
+                }
+
 
                 ctx.clearRect(0, 0, canv2.width, canv2.height);
                 ctx.strokeRect(x, y, w, h);
