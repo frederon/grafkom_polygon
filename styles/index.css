@@ -28,8 +28,6 @@ section #webgl {
     top: 100;
     left:0;
     border: 5px solid black;
-    width: 40vw;
-    height: 40vw;
 }
 
 section .control {

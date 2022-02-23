@@ -1,5 +1,7 @@
 attribute vec2 a_pos;
+uniform mat3 u_projMatrix;
 
 void main() {
-  gl_Position = vec4(a_pos, 0, 1);
+  vec2 position = (u_projMatrix * vec3(a_pos, 1)).xy;
+  gl_Position = vec4(position, 0, 1);
 }
