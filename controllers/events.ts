@@ -1,5 +1,6 @@
 import BaseObject from "../models/BaseObject";
 import Line from "../models/Line";
+import Rectangle from "../models/Rectangle";
 import { Action } from "./enums";
 import Loader from "./loader";
 
@@ -10,7 +11,7 @@ class EventsLoader {
   private startVertex!: [number, number];
   private tempObj!: BaseObject;
 
-  public action: Action = Action.DRAW_LINE;
+  public action: Action = Action.DRAW_RECTANGLE;
 
   constructor(app: Loader) {
     this.app = app;
@@ -43,6 +44,9 @@ class EventsLoader {
     if (this.action === Action.DRAW_LINE) {
       this.isDrawing = true;
       this.startVertex = [x, y];
+    } else if (this.action == Action.DRAW_RECTANGLE) {
+      this.isDrawing = true;
+      this.startVertex = [x, y];
     }
   }
 
@@ -55,6 +59,9 @@ class EventsLoader {
       if (this.action === Action.DRAW_LINE) {
         const line = new Line(1, [...this.startVertex, x, y])
         this.app.tempObject = line;
+      } else if (this.action === Action.DRAW_RECTANGLE) {
+        const rectangle = new Rectangle(1, [...this.startVertex, x, this.startVertex[1], this.startVertex[0], y, x, y])
+        this.app.tempObject = rectangle;
       }
     }
   }
@@ -67,6 +74,11 @@ class EventsLoader {
       if (this.action === Action.DRAW_LINE) {
         const line = new Line(1, [...this.startVertex, x, y])
         this.app.objects.push(line);
+
+        this.isDrawing = false;
+      } else if (this.action === Action.DRAW_RECTANGLE) {
+        const rectangle = new Rectangle(1, [...this.startVertex, x, this.startVertex[1], this.startVertex[0], y, x, y])
+        this.app.objects.push(rectangle);
 
         this.isDrawing = false;
       }
