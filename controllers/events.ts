@@ -11,7 +11,7 @@ class EventsLoader {
   private startVertex!: [number, number];
   private tempObj!: BaseObject;
 
-  public action: Action = Action.DRAW_RECTANGLE;
+  public action: Action = Action.DRAW_LINE;
 
   constructor(app: Loader) {
     this.app = app;
