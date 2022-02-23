@@ -10,5 +10,13 @@ export default {
     ['snowpack-plugin-glslify', { "compress": false }],
     ['@snowpack/plugin-typescript']
   ],
-  exclude: ['**/.git/**/*']
+  exclude: ['**/.git/**/*'],
+  buildOptions: {
+    out: "_build"
+  },
+  optimize: {
+    bundle: true,
+    minify: true,
+    sourcemap: false
+  }
 }

@@ -1,3 +1,4 @@
+import { ObjectType } from "../controllers/enums";
 import BaseObject from "./BaseObject";
 
 class Line extends BaseObject {
@@ -8,6 +9,7 @@ class Line extends BaseObject {
     vertices: Array<number>
   ) {
     super(id);
+    this.type = ObjectType.LINE;
     this.vertices = vertices;
   }
 

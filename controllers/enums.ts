@@ -5,3 +5,14 @@ export enum ObjectType {
   RECTANGLE,
   POLYGON
 }
+
+export enum Action {
+  DRAW_POINT,
+  DRAW_LINE,
+  DRAW_SQUARE,
+  DRAW_RECTANGLE,
+  DRAW_POLYGON,
+  TRANSLATE,
+  ROTATE,
+  SCALE
+}

@@ -1,13 +1,16 @@
 import vertShaderData from "../shaders/vertex_shader.glsl"
 import fragShaderData from "../shaders/fragment_shader.glsl"
+import BaseObject from "../models/BaseObject";
 
 class Loader {
-  private canvas!: HTMLCanvasElement;
+  public canvas!: HTMLCanvasElement;
   public ctx!: WebGL2RenderingContext;
 
   public shaderProgram!: WebGLProgram;
   private vertexShader!: WebGLShader;
   private fragmentShader!: WebGLShader;
+
+  public objects!: Array<BaseObject>;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
