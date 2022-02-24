@@ -1,18 +1,17 @@
 import BaseObject from "./BaseObject";
 import { ObjectType } from "../controllers/enums";
 
-
-class Square extends BaseObject{
+class Square extends BaseObject {
     private vertices: Array<number>;
 
-    constructor(id: number, vertices: Array<number>){
+    constructor(id: number, vertices: Array<number>) {
         super(id);
         this.type = ObjectType.SQUARE;
         this.vertices = vertices;
     }
 
 
-    draw(shaderProgram: WebGLProgram, ctx: WebGL2RenderingContext){
+    draw(shaderProgram: WebGLProgram, ctx: WebGL2RenderingContext) {
         const vertBuf = ctx.createBuffer();
         ctx.bindBuffer(ctx.ARRAY_BUFFER, vertBuf);
         ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array(this.vertices), ctx.STATIC_DRAW);
@@ -28,8 +27,7 @@ class Square extends BaseObject{
         ctx.enableVertexAttribArray(vertexPos)
 
         ctx.drawArrays(ctx.TRIANGLE_FAN, 0, 4)
-
     }
-
 }
+
 export default Square;

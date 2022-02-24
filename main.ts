@@ -1,10 +1,9 @@
 import EventsLoader from "./controllers/events";
 import Loader from "./controllers/loader"
-import Line from "./models/Line"
 
 const canvas = document.getElementById("webgl") as HTMLCanvasElement;
-canvas.width = 600
-canvas.height = 600
+canvas.width = 800
+canvas.height = 800
 
 const app = new Loader(canvas);
 new EventsLoader(app);
