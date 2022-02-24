@@ -4,6 +4,7 @@ import Rectangle from "../models/Rectangle";
 import Square from "../models/Square";
 import { Action } from "./enums";
 import Loader from "./loader";
+import { convertHexToRGB } from "./utils";
 
 class EventsLoader {
   private app: Loader;
@@ -11,6 +12,8 @@ class EventsLoader {
   private isDrawing: boolean;
   private startVertex!: [number, number];
   private tempObj!: BaseObject;
+
+  private selectedColor!: [number, number, number, number];
 
   public action: Action = Action.DRAW_LINE;
 
@@ -23,6 +26,7 @@ class EventsLoader {
     this.app.canvas.addEventListener('mousemove', this.whileDrawing);
 
     this.setupActionButtons()
+    this.setupColor()
 
     // Request frame for smoother animation
     const requestAnimationFunction = (time: number) => {
@@ -63,10 +67,13 @@ class EventsLoader {
     // Checks whether the user is draging or not
     if (this.isDrawing) {
       if (this.action === Action.DRAW_LINE) {
-        const line = new Line(1, [...this.startVertex, x, y])
+        const line = new Line([...this.startVertex, x, y], this.selectedColor)
         this.app.tempObject = line;
       } else if (this.action === Action.DRAW_RECTANGLE) {
-        const rectangle = new Rectangle(1, [...this.startVertex, x, this.startVertex[1], this.startVertex[0], y, x, y])
+        const rectangle = new Rectangle(
+          [...this.startVertex, x, this.startVertex[1], this.startVertex[0], y, x, y],
+          this.selectedColor
+        )
         this.app.tempObject = rectangle;
       } else if (this.action === Action.DRAW_SQUARE) {
         var x1 = this.startVertex[0];
@@ -89,7 +96,7 @@ class EventsLoader {
 
         var vertices = [x1, y1, x2, y1, x2, posY, x1, posY];
 
-        const square = new Square(1, vertices)
+        const square = new Square(vertices, this.selectedColor)
         this.app.tempObject = square;
       }
     }
@@ -101,12 +108,15 @@ class EventsLoader {
     // Checks whether the user is draging or not
     if (this.isDrawing) {
       if (this.action === Action.DRAW_LINE) {
-        const line = new Line(1, [...this.startVertex, x, y])
+        const line = new Line([...this.startVertex, x, y], this.selectedColor)
         this.app.objects.push(line);
 
         this.isDrawing = false;
       } else if (this.action === Action.DRAW_RECTANGLE) {
-        const rectangle = new Rectangle(1, [...this.startVertex, x, this.startVertex[1], this.startVertex[0], y, x, y])
+        const rectangle = new Rectangle(
+          [...this.startVertex, x, this.startVertex[1], this.startVertex[0], y, x, y],
+          this.selectedColor
+        )
         this.app.objects.push(rectangle);
 
         this.isDrawing = false;
@@ -131,7 +141,7 @@ class EventsLoader {
 
         var vertices = [x1, y1, x2, y1, x2, posY, x1, posY];
 
-        const square = new Square(1, vertices)
+        const square = new Square(vertices, this.selectedColor)
         this.app.objects.push(square);
 
         this.isDrawing = false;
@@ -157,6 +167,19 @@ class EventsLoader {
     })
     document.querySelector('#action-color')?.addEventListener('click', () => {
       this.action = Action.CHANGE_COLOR
+    })
+  }
+
+  private setupColor() {
+    const colorPicker = document.querySelector('#color') as HTMLInputElement;
+
+    // set default value for color
+    colorPicker.value = "#ff0000"
+    this.selectedColor = [1, 0, 0, 1]
+
+    colorPicker.addEventListener('change', () => {
+      const result = convertHexToRGB(colorPicker.value)
+      if (result) this.selectedColor = [...result, 1.0];
     })
   }
 

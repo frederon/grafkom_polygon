@@ -5,10 +5,10 @@ class Line extends BaseObject {
   public vertices: Array<number>;
 
   constructor(
-    id: number,
-    vertices: Array<number>
+    vertices: Array<number>,
+    color: [number, number, number, number]
   ) {
-    super(id);
+    super(color);
     this.type = ObjectType.LINE;
     this.vertices = vertices;
   }

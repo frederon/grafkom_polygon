@@ -4,8 +4,11 @@ import { ObjectType } from "../controllers/enums";
 class Square extends BaseObject {
     private vertices: Array<number>;
 
-    constructor(id: number, vertices: Array<number>) {
-        super(id);
+    constructor(
+        vertices: Array<number>,
+        color: [number, number, number, number]
+    ) {
+        super(color);
         this.type = ObjectType.SQUARE;
         this.vertices = vertices;
     }
