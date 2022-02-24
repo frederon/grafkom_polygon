@@ -22,6 +22,8 @@ class EventsLoader {
     this.app.canvas.addEventListener('mouseup', this.endDrawing);
     this.app.canvas.addEventListener('mousemove', this.whileDrawing);
 
+    this.setupActionButtons()
+
     // Request frame for smoother animation
     const requestAnimationFunction = (time: number) => {
       time *= 0.0001;
@@ -135,6 +137,27 @@ class EventsLoader {
         this.isDrawing = false;
       }
     }
+  }
+
+  private setupActionButtons() {
+    document.querySelector('#action-line')?.addEventListener('click', () => {
+      this.action = Action.DRAW_LINE
+    })
+    document.querySelector('#action-square')?.addEventListener('click', () => {
+      this.action = Action.DRAW_SQUARE
+    })
+    document.querySelector('#action-rectangle')?.addEventListener('click', () => {
+      this.action = Action.DRAW_RECTANGLE
+    })
+    document.querySelector('#action-polygon')?.addEventListener('click', () => {
+      this.action = Action.DRAW_POLYGON
+    })
+    document.querySelector('#action-transform')?.addEventListener('click', () => {
+      this.action = Action.TRANSFORM
+    })
+    document.querySelector('#action-color')?.addEventListener('click', () => {
+      this.action = Action.CHANGE_COLOR
+    })
   }
 
   private updateMousePosLabel(event: MouseEvent) {
