@@ -55,8 +55,8 @@ class EventsLoader {
   }
 
   private whileDrawing = (event: MouseEvent) => {
-    console.log("move")
     const [x, y] = this.getMousePosition(event);
+    this.updateMousePosLabel(event)
 
     // Checks whether the user is draging or not
     if (this.isDrawing) {
@@ -135,6 +135,16 @@ class EventsLoader {
         this.isDrawing = false;
       }
     }
+  }
+
+  private updateMousePosLabel(event: MouseEvent) {
+    const [x, y] = this.getMousePosition(event);
+
+    const mouseX = document.querySelector('#mouse-pos-x') as HTMLInputElement
+    mouseX.value = x.toFixed(3);
+
+    const mouseY = document.querySelector('#mouse-pos-y') as HTMLInputElement
+    mouseY.value = y.toFixed(3);
   }
 }
 
