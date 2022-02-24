@@ -3,7 +3,7 @@ import Loader from "./controllers/loader"
 import Line from "./models/Line"
 
 const canvas = document.getElementById("webgl") as HTMLCanvasElement;
-canvas.width = 800
+canvas.width = 600
 canvas.height = 600
 
 const app = new Loader(canvas);

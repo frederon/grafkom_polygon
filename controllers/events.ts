@@ -1,6 +1,7 @@
 import BaseObject from "../models/BaseObject";
 import Line from "../models/Line";
 import Rectangle from "../models/Rectangle";
+import Square from "../models/Square";
 import { Action } from "./enums";
 import Loader from "./loader";
 
@@ -44,7 +45,10 @@ class EventsLoader {
     if (this.action === Action.DRAW_LINE) {
       this.isDrawing = true;
       this.startVertex = [x, y];
-    } else if (this.action == Action.DRAW_RECTANGLE) {
+    } else if (this.action === Action.DRAW_RECTANGLE) {
+      this.isDrawing = true;
+      this.startVertex = [x, y];
+    } else if (this.action === Action.DRAW_SQUARE) {
       this.isDrawing = true;
       this.startVertex = [x, y];
     }
@@ -62,6 +66,29 @@ class EventsLoader {
       } else if (this.action === Action.DRAW_RECTANGLE) {
         const rectangle = new Rectangle(1, [...this.startVertex, x, this.startVertex[1], this.startVertex[0], y, x, y])
         this.app.tempObject = rectangle;
+      } else if (this.action === Action.DRAW_SQUARE) {
+        var x1 = this.startVertex[0];
+        var y1 = this.startVertex[1];
+        var x2 = x;
+        var y2 = y;
+
+        var deltax = x2 - x1;
+
+        var posY = y1;
+        if (x2 > x1 && y2 > y1) {
+          posY += deltax;
+        } else {
+          posY -= deltax;
+        }
+
+        if (x2 < x1 && y2 < y1) {
+          posY += 2 * deltax;
+        }
+
+        var vertices = [x1, y1, x2, y1, x2, posY, x1, posY];
+
+        const square = new Square(1, vertices)
+        this.app.tempObject = square;
       }
     }
   }
@@ -79,6 +106,31 @@ class EventsLoader {
       } else if (this.action === Action.DRAW_RECTANGLE) {
         const rectangle = new Rectangle(1, [...this.startVertex, x, this.startVertex[1], this.startVertex[0], y, x, y])
         this.app.objects.push(rectangle);
+
+        this.isDrawing = false;
+      } else if (this.action === Action.DRAW_SQUARE) {
+        var x1 = this.startVertex[0];
+        var y1 = this.startVertex[1];
+        var x2 = x;
+        var y2 = y;
+
+        var deltax = x2 - x1;
+
+        var posY = y1;
+        if (x2 > x1 && y2 > y1) {
+          posY += deltax;
+        } else {
+          posY -= deltax;
+        }
+
+        if (x2 < x1 && y2 < y1) {
+          posY += 2 * deltax;
+        }
+
+        var vertices = [x1, y1, x2, y1, x2, posY, x1, posY];
+
+        const square = new Square(1, vertices)
+        this.app.objects.push(square);
 
         this.isDrawing = false;
       }
