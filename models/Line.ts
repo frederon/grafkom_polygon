@@ -7,7 +7,7 @@ class Line extends BaseObject {
     vertices: Array<number>,
     color: [number, number, number, number]
   ) {
-    super(vertices ,color);
+    super(vertices, color);
     this.type = ObjectType.LINE;
   }
 
@@ -31,6 +31,9 @@ class Line extends BaseObject {
     ctx.enableVertexAttribArray(vertexPos)
 
     ctx.drawArrays(ctx.LINES, 0, 2)
+  }
+  getVertices(): number[] {
+    return this.vertices;
   }
 }
 

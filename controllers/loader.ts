@@ -5,6 +5,7 @@ import Line from "../models/Line";
 import Rectangle from "../models/Rectangle";
 import { Titik, isInside, isInline, getMousePosition, getArrOfTitiks } from "./utils";
 import { ObjectType } from "./enums";
+import Polygon from "../models/Polygon";
 
 class Loader {
   public canvas!: HTMLCanvasElement;
@@ -97,9 +98,8 @@ class Loader {
           return this.objects[i];
         }
       }
-      else if (this.objects[i].type === ObjectType.SQUARE
-        || this.objects[i].type === ObjectType.RECTANGLE) {
-        let vertices = this.objects[i].vertices;
+      else {
+        let vertices = this.objects[i].getVertices();
         let pos = getMousePosition(this.canvas, event);
         let arrayOfPoints = getArrOfTitiks(vertices);
         let p3 = new Titik(pos[0], pos[1]);
@@ -107,7 +107,6 @@ class Loader {
           return this.objects[i];
         }
       }
-      // TODO : Polygon
     }
     return null;
   }

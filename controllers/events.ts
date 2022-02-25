@@ -41,7 +41,6 @@ class EventsLoader {
   
   private startDrawing = (event: MouseEvent): void => {
     const [x, y] = getMousePosition(this.app.canvas, event);
-    console.log(this.app.getNearestObject(event))
 
     if (this.action === Action.DRAW_LINE) {
       this.isDrawing = true;

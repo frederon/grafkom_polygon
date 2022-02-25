@@ -7,7 +7,7 @@ class Point extends BaseObject {
     vertices: Array<number>,
     color: [number, number, number, number]
   ) {
-    super( vertices, color);
+    super(vertices, color);
     this.type = ObjectType.POINT;
   }
 
@@ -31,6 +31,10 @@ class Point extends BaseObject {
     ctx.enableVertexAttribArray(vertexPos)
 
     ctx.drawArrays(ctx.POINTS, 0, 1)
+  }
+
+  getVertices(): number[] {
+    return this.vertices
   }
 }
 

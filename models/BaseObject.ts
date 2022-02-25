@@ -1,7 +1,7 @@
 import { ObjectType } from "../controllers/enums";
 
 abstract class BaseObject {
-  public vertices : Array<number>;
+  public vertices: Array<number>;
   public type!: ObjectType;
   public color!: [number, number, number, number]; //RGBA
   public projectionMatrix: Array<number>;
@@ -16,6 +16,8 @@ abstract class BaseObject {
     shaderProgram: WebGLProgram,
     ctx: WebGL2RenderingContext
   ): void;
+
+  abstract getVertices(): Array<number>;
 }
 
 export default BaseObject;
