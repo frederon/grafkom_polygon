@@ -9,7 +9,6 @@ class Line extends BaseObject {
   ) {
     super(vertices ,color);
     this.type = ObjectType.LINE;
-    this.vertices = vertices;
   }
 
   public draw(

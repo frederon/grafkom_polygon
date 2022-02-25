@@ -9,7 +9,6 @@ class Rectangle extends BaseObject {
   ) {
     super(vertices, color);
     this.type = ObjectType.RECTANGLE;
-    this.vertices = vertices;
   }
 
   public draw(

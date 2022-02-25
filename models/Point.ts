@@ -9,7 +9,6 @@ class Point extends BaseObject {
   ) {
     super( vertices, color);
     this.type = ObjectType.POINT;
-    this.vertices = vertices;
   }
 
   public draw(

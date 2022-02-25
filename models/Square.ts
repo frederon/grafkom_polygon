@@ -9,7 +9,6 @@ class Square extends BaseObject {
     ) {
         super(vertices, color);
         this.type = ObjectType.SQUARE;
-        this.vertices = vertices;
     }
 
 
