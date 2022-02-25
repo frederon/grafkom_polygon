@@ -1,6 +1,10 @@
 import vertShaderData from "../shaders/vertex_shader.glsl"
 import fragShaderData from "../shaders/fragment_shader.glsl"
 import BaseObject from "../models/BaseObject";
+import Line from "../models/Line";
+import Rectangle from "../models/Rectangle";
+import { Titik, isInside, isInline, getMousePosition, getArrOfTitiks } from "./utils";
+import { ObjectType } from "./enums";
 
 class Loader {
   public canvas!: HTMLCanvasElement;
@@ -81,9 +85,32 @@ class Loader {
     }
   }
 
-  // public getNearestObject = (x: number, y: number, treshold: number): BaseObject | null {
-
-  // }
+  public getNearestObject = (event: MouseEvent): BaseObject | null => {
+    for (let i: number = 0; i < this.objects.length; i++) {
+      if (this.objects[i].type === ObjectType.LINE) {
+        let vertices = this.objects[i].vertices;
+        let pos = getMousePosition(this.canvas, event);
+        let p1 = new Titik(vertices[0], vertices[1]);
+        let p2 = new Titik(vertices[2], vertices[3]);
+        let p3 = new Titik(pos[0], pos[1]);
+        if (isInline(p1, p2, p3)) {
+          return this.objects[i];
+        }
+      }
+      else if (this.objects[i].type === ObjectType.SQUARE
+        || this.objects[i].type === ObjectType.RECTANGLE) {
+        let vertices = this.objects[i].vertices;
+        let pos = getMousePosition(this.canvas, event);
+        let arrayOfPoints = getArrOfTitiks(vertices);
+        let p3 = new Titik(pos[0], pos[1]);
+        if (isInside(arrayOfPoints, arrayOfPoints.length, p3)) {
+          return this.objects[i];
+        }
+      }
+      // TODO : Polygon
+    }
+    return null;
+  }
 
   // public getNearestPointInPolygon(x: number, y: number, treshold: number): Point | null {
 

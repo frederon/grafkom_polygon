@@ -2,13 +2,12 @@ import BaseObject from "./BaseObject";
 import { ObjectType } from "../controllers/enums";
 
 class Square extends BaseObject {
-    private vertices: Array<number>;
 
     constructor(
         vertices: Array<number>,
         color: [number, number, number, number]
     ) {
-        super(color);
+        super(vertices, color);
         this.type = ObjectType.SQUARE;
         this.vertices = vertices;
     }

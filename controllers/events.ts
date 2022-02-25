@@ -38,9 +38,10 @@ class EventsLoader {
     };
     window.requestAnimationFrame(requestAnimationFunction);
   }
-
+  
   private startDrawing = (event: MouseEvent): void => {
     const [x, y] = getMousePosition(this.app.canvas, event);
+    console.log(this.app.getNearestObject(event))
 
     if (this.action === Action.DRAW_LINE) {
       this.isDrawing = true;
@@ -74,7 +75,7 @@ class EventsLoader {
         this.app.tempObjects = line;
       } else if (this.action === Action.DRAW_RECTANGLE) {
         const rectangle = new Rectangle(
-          [...this.startVertex, x, this.startVertex[1], this.startVertex[0], y, x, y],
+          [...this.startVertex, x, this.startVertex[1], x, y, this.startVertex[0], y],
           this.selectedColor
         )
         this.app.tempObjects = rectangle;
@@ -117,7 +118,7 @@ class EventsLoader {
         this.isDrawing = false;
       } else if (this.action === Action.DRAW_RECTANGLE) {
         const rectangle = new Rectangle(
-          [...this.startVertex, x, this.startVertex[1], this.startVertex[0], y, x, y],
+          [...this.startVertex, x, this.startVertex[1], x, y, this.startVertex[0], y],
           this.selectedColor
         )
         this.app.objects.push(rectangle);

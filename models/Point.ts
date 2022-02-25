@@ -2,13 +2,12 @@ import { ObjectType } from "../controllers/enums";
 import BaseObject from "./BaseObject";
 
 class Point extends BaseObject {
-  public vertices: Array<number>;
 
   constructor(
     vertices: Array<number>,
     color: [number, number, number, number]
   ) {
-    super(color);
+    super( vertices, color);
     this.type = ObjectType.POINT;
     this.vertices = vertices;
   }

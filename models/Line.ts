@@ -2,13 +2,12 @@ import { ObjectType } from "../controllers/enums";
 import BaseObject from "./BaseObject";
 
 class Line extends BaseObject {
-  public vertices: Array<number>;
 
   constructor(
     vertices: Array<number>,
     color: [number, number, number, number]
   ) {
-    super(color);
+    super(vertices ,color);
     this.type = ObjectType.LINE;
     this.vertices = vertices;
   }

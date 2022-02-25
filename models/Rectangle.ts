@@ -2,13 +2,12 @@ import { ObjectType } from "../controllers/enums";
 import BaseObject from "./BaseObject";
 
 class Rectangle extends BaseObject {
-  public vertices: Array<number>;
 
   constructor(
     vertices: Array<number>,
     color: [number, number, number, number]
   ) {
-    super(color);
+    super(vertices, color);
     this.type = ObjectType.RECTANGLE;
     this.vertices = vertices;
   }
@@ -32,7 +31,7 @@ class Rectangle extends BaseObject {
     ctx.uniform4fv(uniformCol, this.color)
     ctx.enableVertexAttribArray(vertexPos)
 
-    ctx.drawArrays(ctx.TRIANGLE_STRIP, 0, 4)
+    ctx.drawArrays(ctx.TRIANGLE_FAN, 0, 4)
   }
 }
 
