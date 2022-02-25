@@ -80,6 +80,14 @@ class Loader {
       }
     }
   }
+
+  // public getNearestObject = (x: number, y: number, treshold: number): BaseObject | null {
+
+  // }
+
+  // public getNearestPointInPolygon(x: number, y: number, treshold: number): Point | null {
+
+  // } 
 }
 
 export default Loader;
