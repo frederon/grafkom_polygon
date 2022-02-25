@@ -1,4 +1,3 @@
-import BaseObject from "../models/BaseObject";
 import Line from "../models/Line";
 import Point from "../models/Point";
 import Polygon from "../models/Polygon";
@@ -6,7 +5,7 @@ import Rectangle from "../models/Rectangle";
 import Square from "../models/Square";
 import { Action } from "./enums";
 import Loader from "./loader";
-import { convertHexToRGB } from "./utils";
+import { convertHexToRGB, getMousePosition } from "./utils";
 
 class EventsLoader {
   private app: Loader;
@@ -40,15 +39,8 @@ class EventsLoader {
     window.requestAnimationFrame(requestAnimationFunction);
   }
 
-  private getMousePosition = (event: MouseEvent): [number, number] => {
-    const bounding = this.app.canvas.getBoundingClientRect();
-    const x = 2 * ((event.x - bounding.left) / bounding.width) - 1;
-    const y = -2 * ((event.y - bounding.top) / bounding.height) + 1;
-    return [x, y]
-  }
-
-  private startDrawing = (event: MouseEvent) => {
-    const [x, y] = this.getMousePosition(event);
+  private startDrawing = (event: MouseEvent): void => {
+    const [x, y] = getMousePosition(this.app.canvas, event);
 
     if (this.action === Action.DRAW_LINE) {
       this.isDrawing = true;
@@ -71,9 +63,8 @@ class EventsLoader {
     }
   }
 
-  private whileDrawing = (event: MouseEvent) => {
-    console.log(this.app.objects)
-    const [x, y] = this.getMousePosition(event);
+  private whileDrawing = (event: MouseEvent): void => {
+    const [x, y] = getMousePosition(this.app.canvas, event)
     this.updateMousePosLabel(event)
 
     // Checks whether the user is draging or not
@@ -114,8 +105,8 @@ class EventsLoader {
     }
   }
 
-  private endDrawing = (event: MouseEvent) => {
-    const [x, y] = this.getMousePosition(event);
+  private endDrawing = (event: MouseEvent): void => {
+    const [x, y] = getMousePosition(this.app.canvas, event)
 
     // Checks whether the user is draging or not
     if (this.isDrawing) {
@@ -161,7 +152,7 @@ class EventsLoader {
     }
   }
 
-  private setupPolygon() {
+  private setupPolygon(): void {
     document.addEventListener('keyup', (event: KeyboardEvent) => {
       console.log(event)
       if (this.isDrawing && event.key === 'Enter' && this.action === Action.DRAW_POLYGON) {
@@ -181,7 +172,7 @@ class EventsLoader {
     })
   }
 
-  private setupActionButtons() {
+  private setupActionButtons(): void {
     document.querySelector('#action-line')?.addEventListener('click', () => {
       this.action = Action.DRAW_LINE
     })
@@ -202,7 +193,7 @@ class EventsLoader {
     })
   }
 
-  private setupColor() {
+  private setupColor(): void {
     const colorPicker = document.querySelector('#color') as HTMLInputElement;
 
     // set default value for color
@@ -215,8 +206,8 @@ class EventsLoader {
     })
   }
 
-  private updateMousePosLabel(event: MouseEvent) {
-    const [x, y] = this.getMousePosition(event);
+  private updateMousePosLabel(event: MouseEvent): void {
+    const [x, y] = getMousePosition(this.app.canvas, event)
 
     const mouseX = document.querySelector('#mouse-pos-x') as HTMLInputElement
     mouseX.value = x.toFixed(3);
