@@ -11,14 +11,14 @@ class Loader {
   private fragmentShader!: WebGLShader;
 
   public objects: Array<BaseObject> = [];
-  public tempObject: BaseObject | null;
+  public tempObjects: BaseObject | Array<BaseObject> | null;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext('webgl2') as WebGL2RenderingContext;
 
     this.objects = [];
-    this.tempObject = null;
+    this.tempObjects = null;
 
     if (!this.ctx) {
       alert('Your browser does not support WebGL')
@@ -72,8 +72,12 @@ class Loader {
       obj.draw(this.shaderProgram, this.ctx);
     }
 
-    if (this.tempObject) {
-      this.tempObject.draw(this.shaderProgram, this.ctx);
+    if (this.tempObjects && this.tempObjects instanceof BaseObject) {
+      this.tempObjects.draw(this.shaderProgram, this.ctx);
+    } else if (this.tempObjects && this.tempObjects instanceof Array) {
+      for (const obj of this.tempObjects) {
+        obj.draw(this.shaderProgram, this.ctx);
+      }
     }
   }
 }

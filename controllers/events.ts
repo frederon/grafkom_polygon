@@ -1,5 +1,7 @@
 import BaseObject from "../models/BaseObject";
 import Line from "../models/Line";
+import Point from "../models/Point";
+import Polygon from "../models/Polygon";
 import Rectangle from "../models/Rectangle";
 import Square from "../models/Square";
 import { Action } from "./enums";
@@ -11,7 +13,6 @@ class EventsLoader {
 
   private isDrawing: boolean;
   private startVertex!: [number, number];
-  private tempObj!: BaseObject;
 
   private selectedColor!: [number, number, number, number];
 
@@ -27,6 +28,7 @@ class EventsLoader {
 
     this.setupActionButtons()
     this.setupColor()
+    this.setupPolygon()
 
     // Request frame for smoother animation
     const requestAnimationFunction = (time: number) => {
@@ -57,10 +59,20 @@ class EventsLoader {
     } else if (this.action === Action.DRAW_SQUARE) {
       this.isDrawing = true;
       this.startVertex = [x, y];
+    } else if (this.action === Action.DRAW_POLYGON) {
+      this.isDrawing = true;
+      const point = new Point([x, y], this.selectedColor)
+      if (this.app.tempObjects instanceof Array) {
+        this.app.tempObjects.push(point)
+      } else {
+        this.app.tempObjects = [point]
+        this.startVertex = [x, y]
+      }
     }
   }
 
   private whileDrawing = (event: MouseEvent) => {
+    console.log(this.app.objects)
     const [x, y] = this.getMousePosition(event);
     this.updateMousePosLabel(event)
 
@@ -68,22 +80,22 @@ class EventsLoader {
     if (this.isDrawing) {
       if (this.action === Action.DRAW_LINE) {
         const line = new Line([...this.startVertex, x, y], this.selectedColor)
-        this.app.tempObject = line;
+        this.app.tempObjects = line;
       } else if (this.action === Action.DRAW_RECTANGLE) {
         const rectangle = new Rectangle(
           [...this.startVertex, x, this.startVertex[1], this.startVertex[0], y, x, y],
           this.selectedColor
         )
-        this.app.tempObject = rectangle;
+        this.app.tempObjects = rectangle;
       } else if (this.action === Action.DRAW_SQUARE) {
-        var x1 = this.startVertex[0];
-        var y1 = this.startVertex[1];
-        var x2 = x;
-        var y2 = y;
+        const x1 = this.startVertex[0];
+        const y1 = this.startVertex[1];
+        const x2 = x;
+        const y2 = y;
 
-        var deltax = x2 - x1;
+        const deltax = x2 - x1;
 
-        var posY = y1;
+        let posY = y1;
         if (x2 > x1 && y2 > y1) {
           posY += deltax;
         } else {
@@ -94,10 +106,10 @@ class EventsLoader {
           posY += 2 * deltax;
         }
 
-        var vertices = [x1, y1, x2, y1, x2, posY, x1, posY];
+        const vertices = [x1, y1, x2, y1, x2, posY, x1, posY];
 
         const square = new Square(vertices, this.selectedColor)
-        this.app.tempObject = square;
+        this.app.tempObjects = square;
       }
     }
   }
@@ -147,6 +159,26 @@ class EventsLoader {
         this.isDrawing = false;
       }
     }
+  }
+
+  private setupPolygon() {
+    document.addEventListener('keyup', (event: KeyboardEvent) => {
+      console.log(event)
+      if (this.isDrawing && event.key === 'Enter' && this.action === Action.DRAW_POLYGON) {
+        const points = this.app.tempObjects as Point[];
+        if (points instanceof Array && points.length < 3) {
+          alert('Polygon requires at least 3 points')
+          this.app.tempObjects = null;
+          return
+        }
+
+        const polygon = new Polygon(points, this.selectedColor)
+        this.app.objects.push(polygon)
+
+        this.app.tempObjects = null;
+        this.isDrawing = false;
+      }
+    })
   }
 
   private setupActionButtons() {
