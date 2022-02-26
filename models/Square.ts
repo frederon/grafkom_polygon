@@ -29,6 +29,14 @@ class Square extends BaseObject {
 
         ctx.drawArrays(ctx.TRIANGLE_FAN, 0, 4)
     }
+
+    public move(
+        origin: [number, number],
+        target: [number, number],
+        treshold: number
+    ) {
+
+    }
 }
 
 export default Square;

@@ -1,3 +1,4 @@
+import BaseObject from "../models/BaseObject";
 import Line from "../models/Line";
 import Point from "../models/Point";
 import Polygon from "../models/Polygon";
@@ -60,6 +61,23 @@ class EventsLoader {
         this.app.tempObjects = [point]
         this.startVertex = [x, y]
       }
+    } else if (this.action === Action.CHANGE_COLOR) {
+      const obj = this.app.getNearestInsideObject(event);
+
+      if (obj) {
+        obj.color = this.selectedColor;
+      }
+    } else if (this.action === Action.TRANSFORM) {
+      const obj = this.app.getNearestObjectByPoint(x, y, 0.02)
+      if (obj) {
+        this.app.tempObjects = Object.assign({}, obj) // copy object for temp object
+        console.log(this.app.tempObjects)
+
+        obj.isTransforming = true;
+
+        this.isDrawing = true;
+        this.startVertex = [x, y];
+      }
     }
   }
 
@@ -101,25 +119,17 @@ class EventsLoader {
 
         const square = new Square(vertices, this.selectedColor)
         this.app.tempObjects = square;
+      } else if (this.action === Action.TRANSFORM) {
+        if (this.app.tempObjects && this.app.tempObjects instanceof BaseObject) {
+          this.app.tempObjects.move([this.startVertex[0], this.startVertex[1]], [x, y], 0.02)
+          // this.startVertex = [x, y]
+        }
       }
     }
   }
 
   private endDrawing = (event: MouseEvent): void => {
     const [x, y] = getMousePosition(this.app.canvas, event)
-
-    if (this.action === Action.TRANSFORM) {
-      console.log(this.app.getNearestObject(event));
-    }
-
-    if (this.action === Action.CHANGE_COLOR) {
-      const obj = this.app.getNearestObject(event);
-      if (obj) {
-        obj.color = this.selectedColor;
-        this.app.clear()
-        this.app.drawObjects()
-      }
-    }
 
     // Checks whether the user is draging or not
     if (this.isDrawing) {
@@ -161,6 +171,16 @@ class EventsLoader {
         this.app.objects.push(square);
 
         this.isDrawing = false;
+      } else if (this.action === Action.TRANSFORM) {
+        this.app.objects.push(
+          this.app.tempObjects as BaseObject
+        );
+
+        this.isDrawing = false;
+      }
+
+      if (this.action !== Action.DRAW_POLYGON) {
+        this.app.tempObjects = null;
       }
     }
   }
@@ -202,6 +222,9 @@ class EventsLoader {
     })
     document.querySelector('#action-color')?.addEventListener('click', () => {
       this.action = Action.CHANGE_COLOR
+    })
+    document.querySelector('#action-help')?.addEventListener('click', () => {
+      this.action = Action.HELP
     })
   }
 

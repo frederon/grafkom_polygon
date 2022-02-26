@@ -32,6 +32,14 @@ class Point extends BaseObject {
 
     ctx.drawArrays(ctx.POINTS, 0, 1)
   }
+
+  public move(
+    origin: [number, number],
+    target: [number, number],
+    treshold: number
+  ) {
+
+  }
 }
 
 export default Point;

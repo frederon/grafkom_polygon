@@ -13,5 +13,6 @@ export enum Action {
   DRAW_RECTANGLE,
   DRAW_POLYGON,
   TRANSFORM,
-  CHANGE_COLOR
+  CHANGE_COLOR,
+  HELP
 }

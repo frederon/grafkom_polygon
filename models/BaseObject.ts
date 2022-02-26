@@ -6,6 +6,8 @@ abstract class BaseObject {
   public vertices: Array<number>;
   public projectionMatrix: Array<number>;
 
+  public isTransforming: boolean = false;
+
   constructor(vertices: Array<number>, color: [number, number, number, number]) {
     this.vertices = vertices;
     this.color = color;
@@ -15,6 +17,12 @@ abstract class BaseObject {
   abstract draw(
     shaderProgram: WebGLProgram,
     ctx: WebGL2RenderingContext
+  ): void;
+
+  abstract move(
+    origin: [number, number],
+    target: [number, number],
+    treshold: number
   ): void;
 }
 

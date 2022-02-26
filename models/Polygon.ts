@@ -1,4 +1,5 @@
 import { ObjectType } from "../controllers/enums";
+import { distance } from "../controllers/utils";
 import BaseObject from "./BaseObject";
 import Point from "./Point";
 
@@ -51,7 +52,7 @@ class Polygon extends BaseObject {
     }
   }
 
-  getVertices() {
+  public getVertices() {
     const arr: Array<number> = [];
     for (let i = 0; i < this.points.length; i++) {
       arr.push(this.points[i].vertices[0]);
@@ -59,6 +60,20 @@ class Polygon extends BaseObject {
     }
     return arr;
   };
+
+  public move(
+    origin: [number, number],
+    target: [number, number],
+    treshold: number
+  ) {
+    for (const p of this.points) {
+      const dist = distance([origin[0], origin[1]], [p.vertices[0], p.vertices[1]])
+      if (dist <= treshold) {
+        p.vertices[0] = target[0]
+        p.vertices[1] = target[1]
+      }
+    }
+  }
 }
 
 export default Polygon;

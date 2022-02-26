@@ -3,7 +3,7 @@ import fragShaderData from "../shaders/fragment_shader.glsl"
 import BaseObject from "../models/BaseObject";
 import Line from "../models/Line";
 import Rectangle from "../models/Rectangle";
-import { isInside, isInline, getMousePosition, getArrOfCoordinates, Coordinate } from "./utils";
+import { isInside, isInline, getMousePosition, getArrOfCoordinates, Coordinate, distance } from "./utils";
 import { ObjectType } from "./enums";
 import Polygon from "../models/Polygon";
 import Point from "../models/Point";
@@ -75,7 +75,9 @@ class Loader {
 
   public drawObjects = (): void => {
     for (const obj of this.objects) {
-      obj.draw(this.shaderProgram, this.ctx);
+      if (!obj.isTransforming) {
+        obj.draw(this.shaderProgram, this.ctx);
+      }
     }
 
     if (this.tempObjects && this.tempObjects instanceof BaseObject) {
@@ -87,8 +89,7 @@ class Loader {
     }
   }
 
-  public getNearestObject = (event: MouseEvent): BaseObject | null => {
-    console.log(this.objects)
+  public getNearestInsideObject = (event: MouseEvent): BaseObject | null => {
     for (let i: number = 0; i < this.objects.length; i++) {
       if (this.objects[i].type === ObjectType.LINE) {
         let vertices = this.objects[i].vertices;
@@ -112,7 +113,18 @@ class Loader {
     return null;
   }
 
-  public getNearestPointInPolygon(x: number, y: number, treshold: number): Point | null {
+  public getNearestObjectByPoint(x: number, y: number, treshold: number): BaseObject | null {
+    for (const obj of this.objects) {
+      const vertices = obj.type === ObjectType.POLYGON ?
+        (obj as Polygon).getVertices() : obj.vertices;
+      const coor = getArrOfCoordinates(vertices);
+      for (const c of coor) {
+        const dist = distance([x, y], [c[0], c[1]])
+        if (dist <= treshold) {
+          return obj
+        }
+      }
+    }
     return null;
   }
 }

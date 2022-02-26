@@ -32,6 +32,14 @@ class Line extends BaseObject {
 
     ctx.drawArrays(ctx.LINES, 0, 2)
   }
+
+  public move(
+    origin: [number, number],
+    target: [number, number],
+    treshold: number
+  ) {
+
+  }
 }
 
 export default Line;
