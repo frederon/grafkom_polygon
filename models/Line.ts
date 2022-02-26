@@ -32,9 +32,6 @@ class Line extends BaseObject {
 
     ctx.drawArrays(ctx.LINES, 0, 2)
   }
-  getVertices(): number[] {
-    return this.vertices;
-  }
 }
 
 export default Line;

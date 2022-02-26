@@ -52,7 +52,7 @@ class Polygon extends BaseObject {
   }
 
   getVertices() {
-    let arr: Array<number> = [];
+    const arr: Array<number> = [];
     for (let i = 0; i < this.points.length; i++) {
       arr.push(this.points[i].vertices[0]);
       arr.push(this.points[i].vertices[1]);

@@ -32,10 +32,6 @@ class Point extends BaseObject {
 
     ctx.drawArrays(ctx.POINTS, 0, 1)
   }
-
-  getVertices(): number[] {
-    return this.vertices
-  }
 }
 
 export default Point;

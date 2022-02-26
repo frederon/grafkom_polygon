@@ -65,7 +65,6 @@ export function doIntersect(p1: Coordinate, q1: Coordinate, p2: Coordinate, q2: 
   return false;
 }
 
-
 export function isInside(polygon: Array<Coordinate>, n: number, p: Coordinate) {
   if (n < 3) {
     return false;

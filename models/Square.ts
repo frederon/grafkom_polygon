@@ -29,10 +29,6 @@ class Square extends BaseObject {
 
         ctx.drawArrays(ctx.TRIANGLE_FAN, 0, 4)
     }
-
-    getVertices(): number[] {
-        return this.vertices
-    }
 }
 
 export default Square;

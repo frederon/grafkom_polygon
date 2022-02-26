@@ -112,6 +112,15 @@ class EventsLoader {
       console.log(this.app.getNearestObject(event));
     }
 
+    if (this.action === Action.CHANGE_COLOR) {
+      const obj = this.app.getNearestObject(event);
+      if (obj) {
+        obj.color = this.selectedColor;
+        this.app.clear()
+        this.app.drawObjects()
+      }
+    }
+
     // Checks whether the user is draging or not
     if (this.isDrawing) {
       if (this.action === Action.DRAW_LINE) {
