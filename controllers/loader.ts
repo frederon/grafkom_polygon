@@ -3,9 +3,10 @@ import fragShaderData from "../shaders/fragment_shader.glsl"
 import BaseObject from "../models/BaseObject";
 import Line from "../models/Line";
 import Rectangle from "../models/Rectangle";
-import { Titik, isInside, isInline, getMousePosition, getArrOfTitiks } from "./utils";
+import { isInside, isInline, getMousePosition, getArrOfCoordinates, Coordinate } from "./utils";
 import { ObjectType } from "./enums";
 import Polygon from "../models/Polygon";
+import Point from "../models/Point";
 
 class Loader {
   public canvas!: HTMLCanvasElement;
@@ -87,22 +88,22 @@ class Loader {
   }
 
   public getNearestObject = (event: MouseEvent): BaseObject | null => {
+    console.log(this.objects)
     for (let i: number = 0; i < this.objects.length; i++) {
       if (this.objects[i].type === ObjectType.LINE) {
         let vertices = this.objects[i].vertices;
         let pos = getMousePosition(this.canvas, event);
-        let p1 = new Titik(vertices[0], vertices[1]);
-        let p2 = new Titik(vertices[2], vertices[3]);
-        let p3 = new Titik(pos[0], pos[1]);
+        let p1 = [vertices[0], vertices[1]] as Coordinate
+        let p2 = [vertices[2], vertices[3]] as Coordinate
+        let p3 = [pos[0], pos[1]] as Coordinate
         if (isInline(p1, p2, p3)) {
           return this.objects[i];
         }
-      }
-      else {
-        let vertices = this.objects[i].getVertices();
+      } else {
+        let vertices = this.objects[i].vertices;
         let pos = getMousePosition(this.canvas, event);
-        let arrayOfPoints = getArrOfTitiks(vertices);
-        let p3 = new Titik(pos[0], pos[1]);
+        let arrayOfPoints = getArrOfCoordinates(vertices);
+        let p3 = [pos[0], pos[1]] as Coordinate;
         if (isInside(arrayOfPoints, arrayOfPoints.length, p3)) {
           return this.objects[i];
         }
@@ -111,9 +112,9 @@ class Loader {
     return null;
   }
 
-  // public getNearestPointInPolygon(x: number, y: number, treshold: number): Point | null {
-
-  // } 
+  public getNearestPointInPolygon(x: number, y: number, treshold: number): Point | null {
+    return null;
+  }
 }
 
 export default Loader;

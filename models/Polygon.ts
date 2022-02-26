@@ -9,7 +9,7 @@ class Polygon extends BaseObject {
     points: Array<Point>,
     color: [number, number, number, number]
   ) {
-    super([], color);
+    super([], color); // we store vertices in "points" for polygon
     this.type = ObjectType.POLYGON;
     this.points = points;
   }

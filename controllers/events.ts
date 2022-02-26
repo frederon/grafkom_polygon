@@ -38,7 +38,7 @@ class EventsLoader {
     };
     window.requestAnimationFrame(requestAnimationFunction);
   }
-  
+
   private startDrawing = (event: MouseEvent): void => {
     const [x, y] = getMousePosition(this.app.canvas, event);
 
@@ -108,6 +108,10 @@ class EventsLoader {
   private endDrawing = (event: MouseEvent): void => {
     const [x, y] = getMousePosition(this.app.canvas, event)
 
+    if (this.action === Action.TRANSFORM) {
+      console.log(this.app.getNearestObject(event));
+    }
+
     // Checks whether the user is draging or not
     if (this.isDrawing) {
       if (this.action === Action.DRAW_LINE) {
@@ -154,7 +158,6 @@ class EventsLoader {
 
   private setupPolygon(): void {
     document.addEventListener('keyup', (event: KeyboardEvent) => {
-      console.log(event)
       if (this.isDrawing && event.key === 'Enter' && this.action === Action.DRAW_POLYGON) {
         const points = this.app.tempObjects as Point[];
         if (points instanceof Array && points.length < 3) {

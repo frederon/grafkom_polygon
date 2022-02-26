@@ -15,39 +15,28 @@ export function convertHexToRGB(hex: string): [number, number, number] | null {
   ]
 }
 
-let INF = 10000;
+export type Coordinate = [number, number]
 
-export class Titik {
-  public x: number;
-  public y: number;
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-  }
-}
-
-export function onSegment(p: Titik, q: Titik, r: Titik) {
-  if (q.x <= Math.max(p.x, r.x) &&
-    q.x >= Math.min(p.x, r.x) &&
-    q.y <= Math.max(p.y, r.y) &&
-    q.y >= Math.min(p.y, r.y)) {
+export function onSegment(p: Coordinate, q: Coordinate, r: Coordinate) {
+  if (q[0] <= Math.max(p[0], r[0]) &&
+    q[0] >= Math.min(p[0], r[0]) &&
+    q[1] <= Math.max(p[1], r[1]) &&
+    q[1] >= Math.min(p[1], r[1])) {
     return true;
   }
   return false;
 }
 
-export function orient(p: Titik, q: Titik, r: Titik) {
-  let val = (q.y - p.y) * (r.x - q.x) -
-    (q.x - p.x) * (r.y - q.y);
+export function orient(p: Coordinate, q: Coordinate, r: Coordinate) {
+  let val = (q[1] - p[1]) * (r[0] - q[0]) -
+    (q[0] - p[0]) * (r[1] - q[1]);
 
-  if (val == 0) {
-    return 0;
-  }
+  if (val == 0) return 0;
+
   return (val > 0) ? 1 : 2;
 }
 
-
-export function doIntersect(p1: Titik, q1: Titik, p2: Titik, q2: Titik) {
+export function doIntersect(p1: Coordinate, q1: Coordinate, p2: Coordinate, q2: Coordinate) {
   let o1 = orient(p1, q1, p2);
   let o2 = orient(p1, q1, q2);
   let o3 = orient(p2, q2, p1);
@@ -65,7 +54,6 @@ export function doIntersect(p1: Titik, q1: Titik, p2: Titik, q2: Titik) {
     return true;
   }
 
-
   if (o3 == 0 && onSegment(p2, p1, q2)) {
     return true;
   }
@@ -78,23 +66,23 @@ export function doIntersect(p1: Titik, q1: Titik, p2: Titik, q2: Titik) {
 }
 
 
-export function isInside(polygon: Array<Titik>, n: number, p: Titik) {
+export function isInside(polygon: Array<Coordinate>, n: number, p: Coordinate) {
   if (n < 3) {
     return false;
   }
 
-  let extreme = new Titik(INF, p.y);
+  let extreme: Coordinate = [10000, p[1]];
 
   let count = 0,
     i = 0;
+
   do {
     let next = (i + 1) % n;
 
 
     if (doIntersect(polygon[i], polygon[next], p, extreme)) {
       if (orient(polygon[i], p, polygon[next]) == 0) {
-        return onSegment(polygon[i], p,
-          polygon[next]);
+        return onSegment(polygon[i], p, polygon[next]);
       }
 
       count++;
@@ -105,15 +93,15 @@ export function isInside(polygon: Array<Titik>, n: number, p: Titik) {
   return (count % 2 == 1);
 }
 
-export function getArrOfTitiks(polygon: Array<number>) {
-  var arr = [];
-  for (var i = 0; i < polygon.length; i += 2) {
-    arr.push(new Titik(polygon[i], polygon[i + 1]));
+export function getArrOfCoordinates(vertices: Array<number>) {
+  var arr: Array<Coordinate> = [];
+  for (var i = 0; i < vertices.length; i += 2) {
+    arr.push([vertices[i], vertices[i + 1]]);
   }
   return arr;
 }
 
-export function isInline(A: Titik, B: Titik, C: Titik) {
+export function isInline(A: Coordinate, B: Coordinate, C: Coordinate) {
   const errorDelta = 0.01;
   const dis1 = distance(A, B);
   const dis2 = distance(B, C);
@@ -122,7 +110,7 @@ export function isInline(A: Titik, B: Titik, C: Titik) {
     dis2 + dis3 <= dis1 + errorDelta;
 }
 
-export function distance(A: Titik, B: Titik) {
-  return Math.sqrt(Math.pow((A.x - B.x), 2) +
-    Math.pow((A.y - B.y), 2));
+export function distance(A: Coordinate, B: Coordinate) {
+  return Math.sqrt(Math.pow((A[0] - B[0]), 2) +
+    Math.pow((A[1] - B[1]), 2));
 }
