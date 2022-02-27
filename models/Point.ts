@@ -37,7 +37,9 @@ class Point extends BaseObject {
     point: number,
     target: [number, number]
   ) {
-
+    if (point !== 0) return
+    this.vertices[0] = target[0]
+    this.vertices[1] = target[1]
   }
 }
 

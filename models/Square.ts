@@ -34,7 +34,33 @@ class Square extends BaseObject {
         point: number,
         target: [number, number]
     ) {
+        console.log("before", this.vertices)
+        console.log(point)
+        const frontPoint = (point + 2) % 4;
+        console.log(frontPoint)
+        const x1 = this.vertices[frontPoint * 2];
+        const y1 = this.vertices[frontPoint * 2 + 1];
+        console.log(x1, y1)
+        const x2 = target[0];
+        const y2 = target[1];
+        console.log(x2, y2)
 
+        const deltax = x2 - x1;
+
+        let posY = y1;
+        if (x2 > x1 && y2 > y1) {
+            posY += deltax;
+        } else {
+            posY -= deltax;
+        }
+
+        if (x2 < x1 && y2 < y1) {
+            posY += 2 * deltax;
+        }
+
+        const vertices = [x1, y1, x2, y1, x2, posY, x1, posY];
+        this.vertices = vertices;
+        console.log("after", this.vertices)
     }
 }
 
