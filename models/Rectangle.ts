@@ -37,7 +37,18 @@ class Rectangle extends BaseObject {
     point: number,
     target: [number, number]
   ) {
+    if (point < 0 || point >= 4) return
+    const frontPoint = (point + 2) % 4;
+    const staticPoint = [this.vertices[frontPoint * 2], this.vertices[frontPoint * 2 + 1]] // front point
 
+    this.vertices = [
+      ...staticPoint,
+      target[0],
+      staticPoint[1],
+      ...target,
+      staticPoint[0],
+      target[1]
+    ]
   }
 }
 

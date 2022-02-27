@@ -118,6 +118,13 @@ class EventsLoader {
         const square = new Square(vertices, this.selectedColor)
         this.app.tempObjects = square;
       } else if (this.action === Action.TRANSFORM) {
+        // update i for square and rectangle
+        const [obj, i] = this.app.getNearestPoint(x, y, 0.02)
+        if (obj) {
+          this.app.tempObjects = obj;
+          this.selectedPoint = i;
+        }
+
         if (this.app.tempObjects && this.app.tempObjects instanceof BaseObject) {
           this.app.tempObjects.move(
             this.selectedPoint,
@@ -130,7 +137,6 @@ class EventsLoader {
 
   private endDrawing = (event: MouseEvent): void => {
     const [x, y] = getMousePosition(this.app.canvas, event)
-    console.log("end objects: ", this.app.objects)
 
     // Checks whether the user is draging or not
     if (this.isDrawing) {
@@ -245,13 +251,13 @@ class EventsLoader {
         var objek;
         for (var j = 0; j < keys.length; j++) {
           if (keys[j] === "vertices") {
-            map.set(keys[j],this.app.objects[i].vertices)
+            map.set(keys[j], this.app.objects[i].vertices)
           } else if (keys[j] === "type") {
-            map.set(keys[j],this.app.objects[i].type)
+            map.set(keys[j], this.app.objects[i].type)
           } else if (keys[j] === "color") {
-            map.set(keys[j],this.app.objects[i].color)
+            map.set(keys[j], this.app.objects[i].color)
           } else if (keys[j] === "projectionMatrix") {
-            map.set(keys[j],this.app.objects[i].projectionMatrix)
+            map.set(keys[j], this.app.objects[i].projectionMatrix)
           }
         }
         objek = Object.fromEntries(map)
@@ -296,7 +302,6 @@ class EventsLoader {
         }
       }
       fileread.readAsText(file_to_read);
-       
     });
   }
 
