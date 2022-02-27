@@ -240,8 +240,8 @@ class EventsLoader {
       this.action = Action.HELP
     })
     document.querySelector('#action-save')?.addEventListener('click', () => {
-      console.log(this.app.objects[1].vertices)
-      const keys = ["vertices", "type", "color", "projectionMatrix"];
+      console.log(this.app.objects[1])
+      const keys = ["vertices", "points", "type", "color", "projectionMatrix"];
       var shapes = [{}];
       // console.log(objects)
       var map = new Map();
@@ -258,6 +258,8 @@ class EventsLoader {
             map.set(keys[j], this.app.objects[i].color)
           } else if (keys[j] === "projectionMatrix") {
             map.set(keys[j], this.app.objects[i].projectionMatrix)
+          } else if (keys[j] === "points") {
+            map.set(keys[j], (this.app.objects[i] as Polygon).points)
           }
         }
         objek = Object.fromEntries(map)
@@ -273,7 +275,7 @@ class EventsLoader {
 
       const element = document.createElement("a");
       element.setAttribute("href", data);
-      element.setAttribute("download", "test.json");
+      element.setAttribute("download", "models.json");
       document.body.appendChild(element);
       element.click();
     })
@@ -295,7 +297,7 @@ class EventsLoader {
             const rectangle = new Rectangle(listobj[i].vertices, listobj[i].color);
             this.app.objects.push(rectangle);
           } else if (listobj[i].type == ObjectType.POLYGON) {
-            const polygon = new Polygon(listobj[i].vertices, listobj[i].color);
+            const polygon = new Polygon((listobj[i] as Polygon).points, listobj[i].color);
             this.app.objects.push(polygon);
           }
           console.log(this.app.objects)
