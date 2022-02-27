@@ -4,7 +4,7 @@ import Point from "../models/Point";
 import Polygon from "../models/Polygon";
 import Rectangle from "../models/Rectangle";
 import Square from "../models/Square";
-import { Action } from "./enums";
+import { Action, ObjectType } from "./enums";
 import Loader from "./loader";
 import { convertHexToRGB, distance, getMousePosition } from "./utils";
 
@@ -233,6 +233,71 @@ class EventsLoader {
     document.querySelector('#action-help')?.addEventListener('click', () => {
       this.action = Action.HELP
     })
+    document.querySelector('#action-save')?.addEventListener('click', () => {
+      console.log(this.app.objects[1].vertices)
+      const keys = ["vertices", "type", "color", "projectionMatrix"];
+      var shapes = [{}];
+      // console.log(objects)
+      var map = new Map();
+      var objek;
+      for (var i = 0; i < this.app.objects.length; i++) {
+        var map = new Map();
+        var objek;
+        for (var j = 0; j < keys.length; j++) {
+          if (keys[j] === "vertices") {
+            map.set(keys[j],this.app.objects[i].vertices)
+          } else if (keys[j] === "type") {
+            map.set(keys[j],this.app.objects[i].type)
+          } else if (keys[j] === "color") {
+            map.set(keys[j],this.app.objects[i].color)
+          } else if (keys[j] === "projectionMatrix") {
+            map.set(keys[j],this.app.objects[i].projectionMatrix)
+          }
+        }
+        objek = Object.fromEntries(map)
+        shapes.push(objek)
+      }
+
+
+      const obj = Object.assign({}, shapes)
+      console.log(obj);
+
+      const json = JSON.stringify(shapes);
+      const data = "data:text/json;charset=utf-8," + encodeURIComponent(json);
+
+      const element = document.createElement("a");
+      element.setAttribute("href", data);
+      element.setAttribute("download", "test.json");
+      document.body.appendChild(element);
+      element.click();
+    })
+    document.querySelector('#action-submit')?.addEventListener('click', () => {
+      var file_to_read = (document.getElementById('action-load') as HTMLInputElement).files![0];
+      var fileread = new FileReader();
+      fileread.onload = (e) => {
+        var content = e.target?.result;
+        var listobj = JSON.parse(content as string);
+        var count = Object.keys(listobj).length
+        for (var i = 0; i < count; i++) {
+          if (listobj[i].type == ObjectType.LINE) {
+            const line = new Line(listobj[i].vertices, listobj[i].color);
+            this.app.objects.push(line);
+          } else if (listobj[i].type == ObjectType.SQUARE) {
+            const square = new Square(listobj[i].vertices, listobj[i].color);
+            this.app.objects.push(square);
+          } else if (listobj[i].type == ObjectType.RECTANGLE) {
+            const rectangle = new Rectangle(listobj[i].vertices, listobj[i].color);
+            this.app.objects.push(rectangle);
+          } else if (listobj[i].type == ObjectType.POLYGON) {
+            const polygon = new Polygon(listobj[i].vertices, listobj[i].color);
+            this.app.objects.push(polygon);
+          }
+          console.log(this.app.objects)
+        }
+      }
+      fileread.readAsText(file_to_read);
+       
+    });
   }
 
   private setupColor(): void {
