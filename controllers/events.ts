@@ -6,7 +6,7 @@ import Rectangle from "../models/Rectangle";
 import Square from "../models/Square";
 import { Action } from "./enums";
 import Loader from "./loader";
-import { convertHexToRGB, getMousePosition } from "./utils";
+import { convertHexToRGB, distance, getMousePosition } from "./utils";
 
 class EventsLoader {
   private app: Loader;
@@ -130,9 +130,19 @@ class EventsLoader {
 
   private endDrawing = (event: MouseEvent): void => {
     const [x, y] = getMousePosition(this.app.canvas, event)
+    console.log(this.app.objects)
 
     // Checks whether the user is draging or not
     if (this.isDrawing) {
+      // checks whether they draw very small object
+      if ([Action.DRAW_LINE, Action.DRAW_RECTANGLE, Action.DRAW_SQUARE].includes(this.action) &&
+        distance([x, y], this.startVertex) <= 0.02
+      ) {
+        this.app.tempObjects = null
+        this.isDrawing = false
+        return
+      }
+
       if (this.action === Action.DRAW_LINE) {
         const line = new Line([...this.startVertex, x, y], this.selectedColor)
         this.app.objects.push(line);
