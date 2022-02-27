@@ -269,7 +269,7 @@ class EventsLoader {
 
       const element = document.createElement("a");
       element.setAttribute("href", data);
-      element.setAttribute("download", "test.json");
+      element.setAttribute("download", "models.json");
       document.body.appendChild(element);
       element.click();
     })
