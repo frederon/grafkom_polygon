@@ -218,26 +218,46 @@ class EventsLoader {
   }
 
   private setupActionButtons(): void {
+    function clearAllActive() {
+      document.querySelectorAll('#container .control-action button').forEach(val => val.classList.remove('active'))
+      document.querySelector('#container .control-help')?.classList.remove('active')
+    }
+
     document.querySelector('#action-line')?.addEventListener('click', () => {
       this.action = Action.DRAW_LINE
+      clearAllActive()
+      document.querySelector('#action-line')?.classList.add('active')
     })
     document.querySelector('#action-square')?.addEventListener('click', () => {
       this.action = Action.DRAW_SQUARE
+      clearAllActive()
+      document.querySelector('#action-square')?.classList.add('active')
     })
     document.querySelector('#action-rectangle')?.addEventListener('click', () => {
       this.action = Action.DRAW_RECTANGLE
+      clearAllActive()
+      document.querySelector('#action-rectangle')?.classList.add('active')
     })
     document.querySelector('#action-polygon')?.addEventListener('click', () => {
       this.action = Action.DRAW_POLYGON
+      clearAllActive()
+      document.querySelector('#action-polygon')?.classList.add('active')
     })
     document.querySelector('#action-transform')?.addEventListener('click', () => {
       this.action = Action.TRANSFORM
+      clearAllActive()
+      document.querySelector('#action-transform')?.classList.add('active')
     })
     document.querySelector('#action-color')?.addEventListener('click', () => {
       this.action = Action.CHANGE_COLOR
+      clearAllActive()
+      document.querySelector('#action-color')?.classList.add('active')
     })
     document.querySelector('#action-help')?.addEventListener('click', () => {
       this.action = Action.HELP
+      clearAllActive()
+      document.querySelector('#action-help')?.classList.add('active')
+      document.querySelector('.control-help')?.classList.toggle('active')
     })
     document.querySelector('#action-save')?.addEventListener('click', () => {
       console.log(this.app.objects[1])

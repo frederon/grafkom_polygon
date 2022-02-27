@@ -26,55 +26,31 @@
       <p>Created by Frederic Ronaldi, Giovani Anggasta, Aria Berlian</p>
     </div>
     <div class="control">
-      <h1>Options ⚙</h1>
+      <h1>Options 🔧</h1>
       <h2>Select action:</h2>
       <div class="control-action">
-        <button id="action-line">Line</button>
+        <button id="action-line" class="active">Line</button>
         <button id="action-square">Square</button>
         <button id="action-rectangle">Rectangle</button>
         <button id="action-polygon">Polygon</button>
         <button id="action-transform">Transform</button>
         <button id="action-color">Change Color</button>
         <button id="action-help">Help</button>
-        <button id="action-save">Save</button>
-        <input type="file" id="action-load" name="myfile">
-        <input type="submit" id="action-submit"/>
       </div>
       <div class="control-color">
         <label for="color">Select color: </label>
         <input type="color" name="color" id="color">
       </div>
-      <div class="slider">
-        <div class="translate-x">
-          <p>Translate X</p>
-          <input type="range" name="translatex" id="translatex" min="0" max="800" step="1">
-          <span class="span-left">0</span>
-          <span class="span-right">800</span>
+      <div class="control-file">
+        <h1>File Manager 📚</h1>
+        <button id="action-save">Export drawing</button>
+        <div>
+          <input type="file" id="action-load" name="myfile">
+          <input type="submit" id="action-submit" value="Import drawing" />
         </div>
-        <div class="translate-y">
-          <p>Translate Y</p>
-          <input type="range" name="translatey" id="translatey" min="0" max="800" step="1">
-          <span class="span-left">0</span>
-          <span class="span-right">800</span>
-        </div>
-        <div class="rotate">
-          <p>Rotate</p>
-          <input type="range" name="rotate" id="rotate" min="0" max="360" step="1">
-          <span class="span-left">0</span>
-          <span class="span-right">360</span>
-        </div>
-        <div class="scale-x">
-          <p>Scale X</p>
-          <input type="range" name="scalex" id="scalex" min="0" max="800" step="1">
-          <span class="span-left">0</span>
-          <span class="span-right">800</span>
-        </div>
-        <div class="scale-y">
-          <p>Scale Y</p>
-          <input type="range" name="scaley" id="scaley" min="0" max="800" step="1">
-          <span class="span-left">0</span>
-          <span class="span-right">800</span>
-        </div>
+      </div>
+      <div class="control-help">
+        <h1>Help 📕</h1>
       </div>
     </div>
   </section>
