@@ -37,7 +37,9 @@ class Line extends BaseObject {
     point: number,
     target: [number, number]
   ) {
-
+    if (point < 0 || point >= 4) return
+    this.vertices[point * 2] = target[0]
+    this.vertices[point * 2 + 1] = target[1]
   }
 }
 

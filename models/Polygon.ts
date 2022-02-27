@@ -65,7 +65,7 @@ class Polygon extends BaseObject {
     point: number,
     target: [number, number]
   ) {
-    if (point < 0) return
+    if (point < 0 || point >= this.points.length) return
     const p = this.points[point]
     p.vertices[0] = target[0]
     p.vertices[1] = target[1]
