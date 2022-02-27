@@ -34,9 +34,8 @@ class Line extends BaseObject {
   }
 
   public move(
-    origin: [number, number],
-    target: [number, number],
-    treshold: number
+    point: number,
+    target: [number, number]
   ) {
 
   }

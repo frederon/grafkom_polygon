@@ -15,6 +15,7 @@ class EventsLoader {
   private startVertex!: [number, number];
 
   private selectedColor!: [number, number, number, number];
+  private selectedPoint!: number;
 
   public action: Action = Action.DRAW_LINE;
 
@@ -68,15 +69,12 @@ class EventsLoader {
         obj.color = this.selectedColor;
       }
     } else if (this.action === Action.TRANSFORM) {
-      const obj = this.app.getNearestObjectByPoint(x, y, 0.02)
+      const [obj, i] = this.app.getNearestPoint(x, y, 0.02)
       if (obj) {
-        this.app.tempObjects = Object.assign({}, obj) // copy object for temp object
-        console.log(this.app.tempObjects)
-
-        obj.isTransforming = true;
-
         this.isDrawing = true;
         this.startVertex = [x, y];
+        this.app.tempObjects = obj;
+        this.selectedPoint = i;
       }
     }
   }
@@ -121,8 +119,10 @@ class EventsLoader {
         this.app.tempObjects = square;
       } else if (this.action === Action.TRANSFORM) {
         if (this.app.tempObjects && this.app.tempObjects instanceof BaseObject) {
-          this.app.tempObjects.move([this.startVertex[0], this.startVertex[1]], [x, y], 0.02)
-          // this.startVertex = [x, y]
+          this.app.tempObjects.move(
+            this.selectedPoint,
+            [x, y]
+          )
         }
       }
     }
@@ -130,7 +130,7 @@ class EventsLoader {
 
   private endDrawing = (event: MouseEvent): void => {
     const [x, y] = getMousePosition(this.app.canvas, event)
-    console.log(this.app.objects)
+    console.log("end objects: ", this.app.objects)
 
     // Checks whether the user is draging or not
     if (this.isDrawing) {
@@ -182,10 +182,7 @@ class EventsLoader {
 
         this.isDrawing = false;
       } else if (this.action === Action.TRANSFORM) {
-        this.app.objects.push(
-          this.app.tempObjects as BaseObject
-        );
-
+        this.selectedPoint = -1;
         this.isDrawing = false;
       }
 

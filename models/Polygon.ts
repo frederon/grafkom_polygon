@@ -62,17 +62,13 @@ class Polygon extends BaseObject {
   };
 
   public move(
-    origin: [number, number],
-    target: [number, number],
-    treshold: number
+    point: number,
+    target: [number, number]
   ) {
-    for (const p of this.points) {
-      const dist = distance([origin[0], origin[1]], [p.vertices[0], p.vertices[1]])
-      if (dist <= treshold) {
-        p.vertices[0] = target[0]
-        p.vertices[1] = target[1]
-      }
-    }
+    if (point < 0) return
+    const p = this.points[point]
+    p.vertices[0] = target[0]
+    p.vertices[1] = target[1]
   }
 }
 

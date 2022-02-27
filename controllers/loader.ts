@@ -73,9 +73,7 @@ class Loader {
 
   public drawObjects = (): void => {
     for (const obj of this.objects) {
-      if (!obj.isTransforming) {
-        obj.draw(this.shaderProgram, this.ctx);
-      }
+      obj.draw(this.shaderProgram, this.ctx);
     }
 
     if (this.tempObjects && this.tempObjects instanceof BaseObject) {
@@ -111,19 +109,24 @@ class Loader {
     return null;
   }
 
-  public getNearestObjectByPoint(x: number, y: number, treshold: number): BaseObject | null {
+  public getNearestPoint(
+    x: number,
+    y: number,
+    treshold: number
+  ): [BaseObject | null, number] { // return object and the i-th point
     for (const obj of this.objects) {
       const vertices = obj.type === ObjectType.POLYGON ?
         (obj as Polygon).getVertices() : obj.vertices;
+
       const coor = getArrOfCoordinates(vertices);
-      for (const c of coor) {
-        const dist = distance([x, y], [c[0], c[1]])
+      for (let i = 0; i < coor.length; i++) {
+        const dist = distance([x, y], [coor[i][0], coor[i][1]])
         if (dist <= treshold) {
-          return obj
+          return [obj, i]
         }
       }
     }
-    return null;
+    return [null, -1];
   }
 }
 
